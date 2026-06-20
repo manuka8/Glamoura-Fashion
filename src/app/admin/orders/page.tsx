@@ -2,9 +2,8 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { ShoppingCart, Search, Filter, Eye, Clock, Truck, CheckCircle, XCircle } from 'lucide-react';
+import { useState } from 'react';
+import { ShoppingCart, Clock, Truck, CheckCircle, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type Order = {
@@ -13,38 +12,24 @@ type Order = {
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   total_amount: number;
   created_at: string;
-  shipping_address: any;
+  shipping_address: { city: string };
 };
 
+const DUMMY_ORDERS: Order[] = [
+  { id: 'ord-8412-2024', user_id: 'user-1', status: 'pending',    total_amount: 185000, created_at: '2024-06-15T10:30:00Z', shipping_address: { city: 'Colombo' } },
+  { id: 'ord-8411-2024', user_id: 'user-2', status: 'shipped',    total_amount: 95000,  created_at: '2024-06-14T14:20:00Z', shipping_address: { city: 'Kandy' } },
+  { id: 'ord-8410-2024', user_id: 'user-3', status: 'processing', total_amount: 74700,  created_at: '2024-06-13T09:15:00Z', shipping_address: { city: 'Galle' } },
+  { id: 'ord-8409-2024', user_id: 'user-4', status: 'delivered',  total_amount: 63000,  created_at: '2024-06-12T11:45:00Z', shipping_address: { city: 'Negombo' } },
+  { id: 'ord-8408-2024', user_id: 'user-1', status: 'delivered',  total_amount: 47700,  created_at: '2024-06-11T16:00:00Z', shipping_address: { city: 'Colombo' } },
+  { id: 'ord-8407-2024', user_id: 'user-5', status: 'cancelled',  total_amount: 25500,  created_at: '2024-06-10T08:30:00Z', shipping_address: { city: 'Matara' } },
+];
+
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+  const [orders, setOrders] = useState<Order[]>(DUMMY_ORDERS);
+  const [loading] = useState(false);
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  async function fetchOrders() {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from('orders')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (data) setOrders(data);
-    setLoading(false);
-  }
-
-  async function updateStatus(orderId: string, newStatus: Order['status']) {
-    const { error } = await supabase
-      .from('orders')
-      .update({ status: newStatus })
-      .eq('id', orderId);
-
-    if (!error) {
-      setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
-    }
+  function updateStatus(orderId: string, newStatus: Order['status']) {
+    setOrders(orders.map(o => o.id === orderId ? { ...o, status: newStatus } : o));
   }
 
   const getStatusStyle = (status: Order['status']) => {

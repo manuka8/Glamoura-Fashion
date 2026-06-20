@@ -2,16 +2,24 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
 import { ArrowLeft, Upload, X, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+const DUMMY_CATEGORIES = [
+  { id: 'women',      name: "Women's Collection" },
+  { id: 'men',        name: "Men's Style" },
+  { id: 'frocks',     name: 'Elegant Frocks' },
+  { id: 'dresses',    name: 'Dresses' },
+  { id: 'watches',    name: 'Luxury Watches' },
+  { id: 'jewellery',  name: 'Fine Jewellery' },
+  { id: 'accessories',name: 'Accessories' },
+];
+
 export default function AddProductPage() {
   const router = useRouter();
-  const supabase = createClient();
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -27,24 +35,11 @@ export default function AddProductPage() {
 
   const [images, setImages] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
-  const [categories, setCategories] = useState<{ id: string, name: string, parent_id: string | null }[]>([]);
-
-  useEffect(() => {
-    async function fetchCategories() {
-      const { data } = await supabase.from('categories').select('id, name, parent_id').order('name');
-      if (data) setCategories(data);
-    }
-    fetchCategories();
-  }, [supabase]);
-
-  const mainCategories = categories.filter(c => !c.parent_id);
-  const getSubs = (parentId: string) => categories.filter(c => c.parent_id === parentId);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
       setImages([...images, ...newFiles]);
-
       const newPreviews = newFiles.map(file => URL.createObjectURL(file));
       setPreviews([...previews, ...newPreviews]);
     }
@@ -54,7 +49,6 @@ export default function AddProductPage() {
     const newImages = [...images];
     newImages.splice(index, 1);
     setImages(newImages);
-
     const newPreviews = [...previews];
     newPreviews.splice(index, 1);
     setPreviews(newPreviews);
@@ -63,50 +57,8 @@ export default function AddProductPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
-    try {
-      // 1. Upload images to Supabase Storage
-      const imageUrls = [];
-      for (const file of images) {
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        const filePath = `product-images/${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('products')
-          .upload(filePath, file);
-
-        if (uploadError) throw uploadError;
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('products')
-          .getPublicUrl(filePath);
-
-        imageUrls.push(publicUrl);
-      }
-
-      // 2. Insert product into database
-      const { error: insertError } = await supabase.from('products').insert({
-        name: formData.name,
-        description: formData.description,
-        price: parseFloat(formData.price),
-        category_id: formData.category_id,
-        stock: parseInt(formData.stock),
-        sizes: formData.sizes.split(',').map(s => s.trim()),
-        colors: formData.colors.split(',').map(c => c.trim()),
-        image_urls: imageUrls,
-        is_featured: formData.is_featured
-      });
-
-      if (insertError) throw insertError;
-
-      router.push('/admin/products');
-      router.refresh();
-    } catch (error: any) {
-      alert(error.message || 'Error adding product');
-    } finally {
-      setLoading(false);
-    }
+    await new Promise(r => setTimeout(r, 600));
+    router.push('/admin/products');
   };
 
   return (
@@ -141,13 +93,8 @@ export default function AddProductPage() {
                 onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
               >
                 <option value="">Select Category</option>
-                {mainCategories.map(main => (
-                  <optgroup key={main.id} label={main.name}>
-                    <option value={main.id}>{main.name} (Main)</option>
-                    {getSubs(main.id).map(sub => (
-                      <option key={sub.id} value={sub.id}>&nbsp;&nbsp;— {sub.name}</option>
-                    ))}
-                  </optgroup>
+                {DUMMY_CATEGORIES.map(cat => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
             </div>

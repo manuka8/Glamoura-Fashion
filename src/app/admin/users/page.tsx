@@ -2,9 +2,8 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { User, Search, Shield, ShieldAlert, UserCheck, MoreVertical } from 'lucide-react';
+import { useState } from 'react';
+import { User, Search, ShieldAlert, UserCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type UserProfile = {
@@ -15,37 +14,22 @@ type UserProfile = {
   created_at: string;
 };
 
+const DUMMY_USERS: UserProfile[] = [
+  { id: 'user-1', email: 'admin@glamoura.lk',       full_name: 'Sophia Loren',      role: 'admin', created_at: '2024-01-10T08:00:00Z' },
+  { id: 'user-2', email: 'alexander@example.com',   full_name: 'Alexander Knight',  role: 'user',  created_at: '2024-02-20T10:30:00Z' },
+  { id: 'user-3', email: 'isabella@example.com',    full_name: 'Isabella Monroe',   role: 'user',  created_at: '2024-03-15T09:00:00Z' },
+  { id: 'user-4', email: 'james@example.com',       full_name: 'James Harrington',  role: 'user',  created_at: '2024-04-05T14:15:00Z' },
+  { id: 'user-5', email: 'amara@example.com',       full_name: 'Amara Nwosu',       role: 'user',  created_at: '2024-05-12T11:00:00Z' },
+];
+
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<UserProfile[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [users, setUsers] = useState<UserProfile[]>(DUMMY_USERS);
+  const [loading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const supabase = createClient();
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  async function fetchUsers() {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (data) setUsers(data);
-    setLoading(false);
-  }
-
-  async function toggleRole(userId: string, currentRole: 'admin' | 'user') {
+  function toggleRole(userId: string, currentRole: 'admin' | 'user') {
     const newRole = currentRole === 'admin' ? 'user' : 'admin';
-    const { error } = await supabase
-      .from('users')
-      .update({ role: newRole })
-      .eq('id', userId);
-    
-    if (!error) {
-      setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
-    }
+    setUsers(users.map(u => u.id === userId ? { ...u, role: newRole } : u));
   }
 
   const filteredUsers = users.filter(u => 

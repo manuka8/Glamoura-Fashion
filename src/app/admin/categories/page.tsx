@@ -3,7 +3,6 @@
 export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
 import { categories as dummyCategories } from '@/lib/dummy-data';
 import { Plus, Folder, Subtitles, Trash2, Edit2, Loader2, ChevronRight, Image as ImageIcon, Sliders } from 'lucide-react';
 import Image from 'next/image';
@@ -27,78 +26,24 @@ export default function AdminCategoriesPage() {
     image: '',
     parent_id: ''
   });
-  const supabase = createClient();
-
   useEffect(() => {
-    fetchCategories();
+    setCategories(dummyCategories);
+    setLoading(false);
   }, []);
 
-  async function fetchCategories() {
-    setLoading(true);
-    try {
-      const { data } = await supabase
-        .from('categories')
-        .select('*')
-        .order('name', { ascending: true });
-      
-      // Adapt Supabase data format to match dummy categories
-      const supabaseFormatted = (data || []).map(cat => ({
-        name: cat.name,
-        image: cat.image_url || null,
-        count: '0 Items',
-        link: `/products?category=${cat.slug}`,
-        gradient: 'from-amber-500/10 to-transparent'
-      }));
-
-      // Combine datasets
-      setCategories([...supabaseFormatted, ...dummyCategories]);
-    } catch (e) {
-      setCategories(dummyCategories);
-    }
-    setLoading(false);
-  }
-
-  const handleAddCategory = async (e: React.FormEvent) => {
+  const handleAddCategory = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-
     const slug = formData.name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-
-    try {
-      const { error } = await supabase.from('categories').insert({
-        name: formData.name,
-        slug,
-        description: formData.description,
-        image_url: formData.image || null
-      });
-
-      if (!error) {
-        setFormData({ name: '', description: '', image: '', parent_id: '' });
-        fetchCategories();
-      } else {
-        // Fallback to local state append for mock testing
-        const mockNewCat = {
-          name: formData.name,
-          image: formData.image || null,
-          count: '0 Items',
-          link: `/products?category=${slug}`,
-          gradient: 'from-amber-500/15 to-neutral-900'
-        };
-        setCategories([mockNewCat, ...categories]);
-        setFormData({ name: '', description: '', image: '', parent_id: '' });
-      }
-    } catch (e) {
-      // Local fallback
-      const mockNewCat = {
-        name: formData.name,
-        image: formData.image || null,
-        count: '0 Items',
-        link: `/products?category=${slug}`,
-        gradient: 'from-amber-500/15 to-neutral-900'
-      };
-      setCategories([mockNewCat, ...categories]);
-      setFormData({ name: '', description: '', image: '', parent_id: '' });
-    }
+    const newCat = {
+      name: formData.name,
+      image: formData.image || null,
+      count: '0 Items',
+      link: `/products?category=${slug}`,
+      gradient: 'from-amber-500/15 to-neutral-900'
+    };
+    setCategories([newCat, ...categories]);
+    setFormData({ name: '', description: '', image: '', parent_id: '' });
     setSubmitting(false);
   };
 

@@ -2,9 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useEffect, useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { Product } from '@/types';
+import { useState } from 'react';
 import { dummyProducts } from '@/lib/dummy-data';
 import { Package, Plus, Search, Filter, Edit, Trash2, SlidersHorizontal, Info } from 'lucide-react';
 import Image from 'next/image';
@@ -20,37 +18,10 @@ function resolveImage(img: any): string {
 }
 
 export default function AdminProductsPage() {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<any[]>(dummyProducts);
+  const [loading] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const supabase = createClient();
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  async function fetchProducts() {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      // Merge real Supabase products with the pristine dummyProducts catalog
-      const combined = [...(data || []), ...dummyProducts];
-      
-      // Deduplicate by ID just in case
-      const unique = combined.filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
-      
-      setProducts(unique);
-    } catch (e) {
-      // Fallback directly to dummy data
-      setProducts(dummyProducts);
-    }
-    setLoading(false);
-  }
 
   const handleDelete = (id: string) => {
     if (!confirm('Are you sure you want to remove this product from the vault catalog?')) return;

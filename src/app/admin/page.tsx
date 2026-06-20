@@ -4,7 +4,6 @@ export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { createClient } from '@/lib/supabase/client';
 import { Product } from '@/types';
 import {
   TrendingUp,
@@ -113,31 +112,9 @@ export default function AdminDashboard() {
   const [hoveredDataPoint, setHoveredDataPoint] = useState<{ x: number; y: number; label: string; value: number; orders: number } | null>(null);
   const [hoveredDonutIndex, setHoveredDonutIndex] = useState<number | null>(null);
 
-  const supabase = createClient();
-
   useEffect(() => {
-    async function loadProducts() {
-      try {
-        setLoadingProducts(true);
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (data && data.length > 0) {
-          setProducts(data);
-        } else {
-          // Use stunning fallback mock luxury products if DB is empty
-          setProducts(MOCK_LUXURY_PRODUCTS);
-        }
-      } catch (err) {
-        console.error('Error fetching products from supabase:', err);
-        setProducts(MOCK_LUXURY_PRODUCTS);
-      } finally {
-        setLoadingProducts(false);
-      }
-    }
-    loadProducts();
+    setProducts(MOCK_LUXURY_PRODUCTS);
+    setLoadingProducts(false);
   }, []);
 
   // Compute stats metrics dynamically
