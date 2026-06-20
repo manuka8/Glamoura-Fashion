@@ -58,7 +58,7 @@ const MOCK_ORDERS = [
       }
     ],
     address: '12 Royal Garden, Colombo 07, Sri Lanka',
-    paymentMethod: 'Stripe Credit Card ending in 4242',
+    paymentMethod: 'Credit Card ending in 4242',
     trackingNumber: 'GSE-849182390-LK',
     carrier: 'Glamoura Express'
   },
@@ -86,7 +86,7 @@ const MOCK_ORDERS = [
       }
     ],
     address: '12 Royal Garden, Colombo 07, Sri Lanka',
-    paymentMethod: 'Stripe Credit Card ending in 4242',
+    paymentMethod: 'Credit Card ending in 4242',
     trackingNumber: 'GSE-849180124-LK',
     carrier: 'Glamoura Express'
   }

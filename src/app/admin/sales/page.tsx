@@ -20,11 +20,11 @@ import {
 import { formatCurrency } from '@/lib/utils';
 
 const MOCK_ORDERS = [
-  { id: 'ORD-8412', customer: 'Sophia Loren', email: 'sophia@example.com', date: 'May 17, 2026', items: 'Cashmere Trench Coat', amount: 185000, status: 'Pending', method: 'Stripe Card' },
+  { id: 'ORD-8412', customer: 'Sophia Loren', email: 'sophia@example.com', date: 'May 17, 2026', items: 'Cashmere Trench Coat', amount: 185000, status: 'Pending', method: 'Credit Card' },
   { id: 'ORD-8411', customer: 'Liam Neeson', email: 'liam@neeson.co.uk', date: 'May 16, 2026', items: 'Italian Leather Brogues', amount: 135000, status: 'Shipped', method: 'Bank Transfer' },
-  { id: 'ORD-8410', customer: 'Isabella Ross', email: 'isabella@ross.it', date: 'May 15, 2026', items: 'Silk Slip Dress - Emerald (x2)', amount: 190000, status: 'Delivered', method: 'Stripe Card' },
-  { id: 'ORD-8409', customer: 'James Dean', email: 'james@dean.com', date: 'May 14, 2026', items: 'Gold Plated Wave Cuff', amount: 68000, status: 'Delivered', method: 'Stripe Card' },
-  { id: 'ORD-8408', customer: 'Charlotte Gainsbourg', email: 'charlotte@gains.fr', date: 'May 12, 2026', items: 'Silk Slip Dress - Emerald', amount: 95000, status: 'Refunded', method: 'Stripe Card' },
+  { id: 'ORD-8410', customer: 'Isabella Ross', email: 'isabella@ross.it', date: 'May 15, 2026', items: 'Silk Slip Dress - Emerald (x2)', amount: 190000, status: 'Delivered', method: 'Credit Card' },
+  { id: 'ORD-8409', customer: 'James Dean', email: 'james@dean.com', date: 'May 14, 2026', items: 'Gold Plated Wave Cuff', amount: 68000, status: 'Delivered', method: 'Credit Card' },
+  { id: 'ORD-8408', customer: 'Charlotte Gainsbourg', email: 'charlotte@gains.fr', date: 'May 12, 2026', items: 'Silk Slip Dress - Emerald', amount: 95000, status: 'Refunded', method: 'Credit Card' },
   { id: 'ORD-8407', customer: 'Alain Delon', email: 'alain@delon.fr', date: 'May 10, 2026', items: 'Cashmere Trench Coat', amount: 185000, status: 'Delivered', method: 'Bank Transfer' }
 ];
 
