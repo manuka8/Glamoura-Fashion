@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, Suspense } from 'react';
 import { dummyProducts } from '@/lib/dummy-data';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -399,7 +399,7 @@ const ListCard = ({ product, wishlist, toggleWishlist }: any) => (
 );
 
 /* ─── Main Page ───────────────────────────────────────────── */
-export default function ProductsPage() {
+function ProductsContent() {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get('category') || 'all';
 
@@ -694,5 +694,13 @@ export default function ProductsPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense>
+      <ProductsContent />
+    </Suspense>
   );
 }
