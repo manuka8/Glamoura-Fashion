@@ -18,6 +18,12 @@ const config: Config = {
           100: '#f0f0f0',
           900: '#111111',
         },
+        aurora: {
+          rose: '#FFD9E8',
+          blue: '#D7EEFF',
+          green: '#DDF7EC',
+        },
+        ink: '#1A2238',
         rose: {
           50: '#fff1f2',
           100: '#ffe4e6',

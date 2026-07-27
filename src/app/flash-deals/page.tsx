@@ -1,52 +1,17 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import {
-  Zap, Clock, TrendingUp, ShieldCheck, ArrowRight,
+  Zap, TrendingUp, ShieldCheck,
   Star, Heart, Flame, Gift, Sparkles, Timer, Crown,
-  Gem, ChevronRight, Eye, Bell, Package, RefreshCw, Headphones
+  Gem, ChevronRight, Eye, Bell, Package, Headphones
 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { salesDeals } from '@/lib/sales-data';
 import { cn, formatCurrency } from '@/lib/utils';
-
-/* ─── Countdown ──────────────────────────────────────────── */
-function useCountdown(initialHours = 23, initialMinutes = 59, initialSeconds = 59) {
-  const [time, setTime] = useState({ h: initialHours, m: initialMinutes, s: initialSeconds });
-  useEffect(() => {
-    const id = setInterval(() => {
-      setTime(prev => {
-        if (prev.s > 0) return { ...prev, s: prev.s - 1 };
-        if (prev.m > 0) return { ...prev, m: prev.m - 1, s: 59 };
-        if (prev.h > 0) return { ...prev, h: prev.h - 1, m: 59, s: 59 };
-        return prev;
-      });
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-  return time;
-}
-
-const TimeBlock = ({ value, label }: { value: number; label: string }) => (
-  <div className="flex flex-col items-center">
-    <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl sm:rounded-2xl w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 flex items-center justify-center shadow-xl">
-      <motion.span
-        key={value}
-        initial={{ y: -12, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-        className="text-xl sm:text-3xl md:text-4xl font-bold font-mono text-white tabular-nums"
-      >
-        {String(value).padStart(2, '0')}
-      </motion.span>
-    </div>
-    <span className="mt-1.5 text-[9px] sm:text-[10px] uppercase tracking-widest text-white/60 font-semibold">
-      {label}
-    </span>
-  </div>
-);
+import { FlashDealsHero } from '@/components/flash-deals/FlashDealsHero';
 
 /* ─── Flash Deal Card ─────────────────────────────────────── */
 const FlashDealCard = ({ deal, index }: { deal: any; index: number }) => {
@@ -177,112 +142,20 @@ const FILTERS = [
 ];
 
 const TRUST_BADGES = [
-  { icon: ShieldCheck, title: '100% Authentic',   desc: 'Genuine products only',   color: 'rose'   },
-  { icon: TrendingUp,  title: 'Global Trends',    desc: 'Curated by experts',      color: 'sky'    },
-  { icon: Package,     title: 'Fast Delivery',    desc: 'Island-wide shipping',    color: 'emerald'},
-  { icon: Headphones,  title: '24/7 Support',     desc: '50k+ happy customers',    color: 'amber'  },
+  { icon: ShieldCheck, title: '100% Authentic',   desc: 'Genuine products only',   chipBg: 'bg-rose-50',    chipText: 'text-rose-500'    },
+  { icon: TrendingUp,  title: 'Global Trends',    desc: 'Curated by experts',      chipBg: 'bg-sky-50',     chipText: 'text-sky-500'     },
+  { icon: Package,     title: 'Fast Delivery',    desc: 'Island-wide shipping',    chipBg: 'bg-emerald-50', chipText: 'text-emerald-500' },
+  { icon: Headphones,  title: '24/7 Support',     desc: '50k+ happy customers',    chipBg: 'bg-rose-50',    chipText: 'text-rose-500'    },
 ];
 
 export default function FlashDealsPage() {
-  const { h, m, s } = useCountdown();
   const [activeFilter, setActiveFilter] = useState('all');
   const filterRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="bg-white min-h-screen overflow-x-hidden">
 
-      {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-[80vh] sm:min-h-[85vh] flex items-center overflow-hidden">
-        {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-rose-900 via-rose-700 to-sky-800">
-          {/* Floating orbs */}
-          <motion.div animate={{ rotate: 360 }} transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
-            className="absolute -top-32 -right-32 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-r from-rose-500/25 to-sky-500/25 rounded-full blur-3xl" />
-          <motion.div animate={{ rotate: -360 }} transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
-            className="absolute -bottom-32 -left-32 w-72 h-72 sm:w-[28rem] sm:h-[28rem] bg-gradient-to-r from-emerald-500/20 to-sky-500/20 rounded-full blur-3xl" />
-
-          {/* Particles */}
-          {[...Array(12)].map((_, i) => (
-            <motion.div key={i}
-              animate={{ y: [0, -80, 0], opacity: [0, 0.6, 0] }}
-              transition={{ duration: 5 + (i % 4), repeat: Infinity, delay: i * 0.4 }}
-              className="absolute w-1 h-1 bg-white/30 rounded-full"
-              style={{ left: `${(i * 8.3) % 100}%`, top: `${30 + (i * 11) % 60}%` }}
-            />
-          ))}
-        </div>
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 w-full py-16 sm:py-24">
-          <div className="flex flex-col items-center text-center gap-10 lg:flex-row lg:text-left lg:items-center lg:justify-between">
-
-            {/* Left – text */}
-            <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-2xl">
-              {/* Badge */}
-              <motion.div
-                animate={{ scale: [1, 1.04, 1] }} transition={{ repeat: Infinity, duration: 2.2 }}
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-rose-500 to-sky-500 px-4 py-1.5 rounded-full mb-5 shadow-lg"
-              >
-                <Zap className="w-4 h-4 fill-white text-white flex-shrink-0" />
-                <span className="text-xs font-black uppercase tracking-wider text-white">Limited Time Event</span>
-              </motion.div>
-
-              <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-bold leading-[1.05] mb-4">
-                <span className="text-white">Mega</span>{' '}
-                <motion.span
-                  animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-                  transition={{ duration: 8, repeat: Infinity }}
-                  className="text-transparent bg-clip-text bg-gradient-to-r from-rose-300 via-sky-300 to-emerald-300 italic"
-                >
-                  Flash
-                </motion.span>{' '}
-                <span className="text-white">Sale</span>
-              </h1>
-
-              <p className="text-base sm:text-lg text-white/75 font-light max-w-md mx-auto lg:mx-0 leading-relaxed">
-                Our biggest markdown of the season. Premium luxury pieces at up to 70% off — only for the next few hours.
-              </p>
-
-              <div className="flex flex-col xs:flex-row items-center lg:items-start gap-3 mt-7">
-                <Link href="#deals"
-                  className="inline-flex items-center gap-2 bg-white text-rose-600 px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wide hover:bg-rose-50 transition-colors shadow-xl"
-                >
-                  Shop Now <ArrowRight className="w-4 h-4" />
-                </Link>
-                <div className="flex items-center gap-2 text-white/70 text-sm font-medium">
-                  <RefreshCw className="w-4 h-4 animate-spin-slow" />
-                  Updated every hour
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right – countdown */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3, duration: 0.8 }}>
-              <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl">
-                <p className="text-center text-white/60 text-xs uppercase tracking-widest mb-5 font-semibold">Ends in</p>
-                <div className="flex items-start gap-2 sm:gap-3">
-                  <TimeBlock value={h} label="Hours" />
-                  <span className="text-2xl sm:text-4xl font-bold text-white/50 mt-3 sm:mt-5">:</span>
-                  <TimeBlock value={m} label="Mins" />
-                  <span className="text-2xl sm:text-4xl font-bold text-white/50 mt-3 sm:mt-5">:</span>
-                  <TimeBlock value={s} label="Secs" />
-                </div>
-                <div className="mt-5 text-center text-white/50 text-[10px] uppercase tracking-widest">
-                  Don't miss out — deals fly fast
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Scroll cue */}
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ repeat: Infinity, duration: 1.6 }}
-          className="absolute bottom-6 left-1/2 -translate-x-1/2">
-          <div className="w-5 h-8 border-2 border-white/30 rounded-full flex justify-center">
-            <motion.div animate={{ y: [0, 12, 0] }} transition={{ repeat: Infinity, duration: 1.6 }}
-              className="w-0.5 h-2 bg-white rounded-full mt-1.5" />
-          </div>
-        </motion.div>
-      </section>
+      <FlashDealsHero />
 
       {/* ── Trust Badges ─────────────────────────────────── */}
       <div className="bg-white border-b border-gray-100 py-5 sm:py-8">
@@ -294,8 +167,8 @@ export default function FlashDealsPage() {
                 viewport={{ once: true }} transition={{ delay: i * 0.08 }}
                 className="flex items-center gap-3 group"
               >
-                <div className={`flex-shrink-0 p-2 sm:p-2.5 rounded-xl bg-${item.color}-50 group-hover:scale-110 transition-transform`}>
-                  <item.icon className={`w-4 h-4 sm:w-5 sm:h-5 text-${item.color}-500`} />
+                <div className={cn("flex-shrink-0 p-2 sm:p-2.5 rounded-xl group-hover:scale-110 transition-transform", item.chipBg)}>
+                  <item.icon className={cn("w-4 h-4 sm:w-5 sm:h-5", item.chipText)} />
                 </div>
                 <div className="min-w-0">
                   <h4 className="text-[10px] sm:text-xs font-black uppercase tracking-wider truncate">{item.title}</h4>
@@ -384,7 +257,7 @@ export default function FlashDealsPage() {
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-            className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-rose-500 via-rose-600 to-sky-600 shadow-2xl"
+            className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-rose-500 via-sky-500 to-emerald-500 shadow-2xl"
           >
             {/* Decorative rings */}
             <div className="absolute -right-16 -top-16 w-64 h-64 rounded-full border border-white/10" />
@@ -399,7 +272,7 @@ export default function FlashDealsPage() {
               <h3 className="text-2xl sm:text-4xl md:text-5xl font-serif font-bold mb-3">
                 Limited Time Offer
               </h3>
-              <p className="text-sm sm:text-lg text-rose-100 mb-6 max-w-xl mx-auto">
+              <p className="text-sm sm:text-lg text-white/85 mb-6 max-w-xl mx-auto">
                 Get an extra 10% off your first flash sale purchase. Use code:
               </p>
               <div className="inline-flex items-center gap-3 bg-white/15 backdrop-blur border border-white/25 px-6 py-3 rounded-2xl mb-6">
@@ -422,7 +295,7 @@ export default function FlashDealsPage() {
         <motion.div animate={{ scale: [1, 1.15, 1], rotate: [0, 60, 0] }} transition={{ duration: 18, repeat: Infinity }}
           className="absolute top-10 left-10 w-48 h-48 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
         <motion.div animate={{ scale: [1.1, 1, 1.1], rotate: [60, 0, 60] }} transition={{ duration: 22, repeat: Infinity }}
-          className="absolute bottom-10 right-10 w-64 h-64 bg-sky-500/15 rounded-full blur-3xl pointer-events-none" />
+          className="absolute bottom-10 right-10 w-64 h-64 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative max-w-2xl mx-auto text-center text-white">
           <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
@@ -436,7 +309,7 @@ export default function FlashDealsPage() {
             <p className="text-white/60 text-sm sm:text-base mb-2">
               Sign up for exclusive early access to flash sales and special drops.
             </p>
-            <p className="text-sky-300 text-xs sm:text-sm font-semibold mb-8">
+            <p className="text-emerald-300 text-xs sm:text-sm font-semibold mb-8">
               First 1,000 subscribers unlock an extra 15% off!
             </p>
             <div className="flex flex-col sm:flex-row gap-3">

@@ -11,12 +11,16 @@ import {
   Star, Shield, Gift, Clock, TrendingUp, Zap, Check,
   Eye, ChevronRight, ShoppingBag, Heart, BarChart3,
   // Professional icons for features
-  Gem, Crown, Award, Medal, Diamond, Sparkle, 
-  Verified, BadgeCheck, Briefcase, CalendarDays,
-  Headphones, Box, Lock, Leaf, Users, Globe
+  Crown, Award, Medal, Diamond, Sparkle,
+  Verified, Briefcase, CalendarDays,
+  Box, Lock, Leaf, Users, Globe
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import bgLuxuryAssurance from '@/app/assets/card background/luxury assurance.png';
+import bgComplimentaryShipping from '@/app/assets/card background/complementory shipping.png';
+import bgPrivateConcierge from '@/app/assets/card background/Private Concierge.png';
+import bgSecureCheckout from '@/app/assets/card background/Secure Checkout.png';
 
 import { useState, useEffect } from 'react';
 import { dummyProducts, categories, features } from '@/lib/dummy-data';
@@ -38,25 +42,25 @@ export default function Home() {
     {
       title: 'Luxury Assurance',
       desc: '100% Authentic Products',
-      icon: Gem,
+      bg: bgLuxuryAssurance,
       gradient: 'from-violet-500 to-purple-700'
     },
     {
       title: 'Complimentary Shipping',
       desc: 'Free on orders over LKR 5,000',
-      icon: Gift,
+      bg: bgComplimentaryShipping,
       gradient: 'from-rose-400 to-pink-600'
     },
     {
       title: 'Private Concierge',
       desc: '24/7 Dedicated Support',
-      icon: Headphones,
+      bg: bgPrivateConcierge,
       gradient: 'from-amber-400 to-orange-500'
     },
     {
       title: 'Secure Checkout',
       desc: 'Encrypted & Safe Payments',
-      icon: BadgeCheck,
+      bg: bgSecureCheckout,
       gradient: 'from-emerald-400 to-teal-600'
     },
   ];
@@ -234,36 +238,35 @@ export default function Home() {
                 transition={{ delay: i * 0.1, type: 'spring', stiffness: 90, damping: 16 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -6, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
-                className="group relative bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:border-transparent transition-all duration-300 cursor-default overflow-hidden"
+                className="group relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-transparent transition-all duration-300 cursor-default overflow-hidden"
               >
-                {/* Gradient top accent on hover */}
-                <div className={`absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r ${feature.gradient} scale-x-0 group-hover:scale-x-100 transition-transform duration-400 origin-left rounded-t-2xl`} />
-
-                {/* Subtle bg glow */}
-                <div className={`absolute -top-10 -right-10 w-32 h-32 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-[0.06] rounded-full blur-2xl transition-opacity duration-500`} />
-
-                {/* Icon */}
-                <div className="relative mb-5 inline-flex">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-50 transition-opacity duration-300 scale-125`} />
-                  <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300`}>
-                    <feature.icon className="w-6 h-6 text-white" />
-                  </div>
+                {/* Background image banner */}
+                <div className="relative w-full aspect-[16/9] overflow-hidden">
+                  <Image
+                    src={feature.bg}
+                    alt=""
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                 </div>
 
-                {/* Text */}
-                <h4 className="text-base font-bold text-gray-900 mb-1.5 group-hover:text-gray-800">
-                  {feature.title}
-                </h4>
-                <p className="text-sm text-gray-500 leading-relaxed">
-                  {feature.desc}
-                </p>
+                <div className="relative p-6">
+                  {/* Text */}
+                  <h4 className="text-base font-bold text-gray-900 mb-1.5 group-hover:text-gray-800">
+                    {feature.title}
+                  </h4>
+                  <p className="text-sm text-gray-500 leading-relaxed">
+                    {feature.desc}
+                  </p>
 
-                {/* Bottom check */}
-                <div className="mt-5 pt-4 border-t border-gray-100 flex items-center gap-1.5 text-xs font-semibold text-gray-400 group-hover:text-gray-600 transition-colors">
-                  <div className={`w-4 h-4 rounded-full bg-gradient-to-br ${feature.gradient} flex items-center justify-center flex-shrink-0`}>
-                    <Check className="w-2.5 h-2.5 text-white" />
+                  {/* Bottom check */}
+                  <div className="mt-5 pt-4 border-t border-gray-100 flex items-center gap-1.5 text-xs font-semibold text-gray-400 group-hover:text-gray-600 transition-colors">
+                    <div className={`w-4 h-4 rounded-full bg-gradient-to-br ${feature.gradient} flex items-center justify-center flex-shrink-0`}>
+                      <Check className="w-2.5 h-2.5 text-white" />
+                    </div>
+                    Guaranteed
                   </div>
-                  Guaranteed
                 </div>
               </motion.div>
             ))}
