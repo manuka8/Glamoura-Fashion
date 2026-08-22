@@ -597,7 +597,7 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
             )}
 
             {/* Quantity + CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-6">
 
               {/* Qty stepper */}
               <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden h-12 flex-shrink-0">
@@ -617,21 +617,21 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
                 </button>
               </div>
 
-              {/* Add to bag */}
+              {/* Add to bag — desktop only, mobile uses the sticky CTA bar */}
               <button
                 onClick={handleAddToCart}
                 disabled={!inStock}
-                className="flex-1 flex items-center justify-center gap-2 bg-gray-900 text-white h-12 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-gray-800 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
+                className="hidden lg:flex flex-1 items-center justify-center gap-2 bg-gray-900 text-white h-12 rounded-xl font-bold text-sm uppercase tracking-widest hover:bg-gray-800 active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
               >
                 <ShoppingBag className="w-4 h-4" />
                 Add to Bag
               </button>
 
-              {/* Wishlist */}
+              {/* Wishlist — desktop only, mobile uses the sticky CTA bar */}
               <button
                 onClick={() => setWishlisted(p => !p)}
                 className={cn(
-                  'w-12 h-12 flex items-center justify-center rounded-xl border-2 transition-all duration-200 flex-shrink-0',
+                  'hidden lg:flex w-12 h-12 items-center justify-center rounded-xl border-2 transition-all duration-200 flex-shrink-0',
                   wishlisted
                     ? 'border-rose-400 bg-rose-50 text-rose-500'
                     : 'border-gray-200 text-gray-400 hover:border-gray-400',
@@ -641,11 +641,11 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
               </button>
             </div>
 
-            {/* Buy Now */}
+            {/* Buy Now — desktop only, mobile uses the sticky CTA bar */}
             <button
               onClick={handleBuyNow}
               disabled={!inStock}
-              className="w-full h-12 rounded-xl border-2 border-gray-900 text-gray-900 font-bold text-sm uppercase tracking-widest hover:bg-gray-900 hover:text-white active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed mb-6"
+              className="hidden lg:block w-full h-12 rounded-xl border-2 border-gray-900 text-gray-900 font-bold text-sm uppercase tracking-widest hover:bg-gray-900 hover:text-white active:scale-[0.98] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed mb-6"
             >
               Buy Now
             </button>
