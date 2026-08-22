@@ -732,32 +732,7 @@ export default function ProductDetailClient({ product }: { product: ProductDetai
         </div>
       </div>
 
-      {/* ── Sticky mobile CTA bar ── */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-white border-t border-gray-100 px-4 py-3 flex gap-3 shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
-        <button
-          onClick={() => setWishlisted(p => !p)}
-          className={cn(
-            'w-12 h-12 flex items-center justify-center rounded-xl border-2 flex-shrink-0 transition-all',
-            wishlisted ? 'border-rose-400 bg-rose-50 text-rose-500' : 'border-gray-200 text-gray-400',
-          )}
-        >
-          <Heart className={cn('w-5 h-5', wishlisted && 'fill-rose-500')} />
-        </button>
-        <button
-          onClick={handleAddToCart}
-          disabled={!inStock}
-          className="flex-1 flex items-center justify-center gap-2 bg-gray-900 text-white rounded-xl font-bold text-sm uppercase tracking-widest disabled:opacity-50"
-        >
-          <ShoppingBag className="w-4 h-4" /> Add to Bag
-        </button>
-        <button
-          onClick={handleBuyNow}
-          disabled={!inStock}
-          className="flex-1 flex items-center justify-center gap-2 border-2 border-gray-900 text-gray-900 rounded-xl font-bold text-sm uppercase tracking-widest disabled:opacity-50"
-        >
-          Buy Now
-        </button>
-      </div>
+      
 
       {/* Bottom padding for mobile sticky bar */}
       <div className="h-20 lg:hidden" />

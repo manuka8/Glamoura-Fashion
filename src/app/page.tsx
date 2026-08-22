@@ -8,7 +8,7 @@ import { BrandWall } from '@/components/home/BrandWall';
 import { FloatingPromo } from '@/components/home/FloatingPromo';
 import {
   ArrowRight, Sparkles, Percent, Truck, RotateCcw,
-  Star, Shield, Gift, Clock, TrendingUp, Zap, Check,
+  Star, Shield, Gift, Clock, TrendingUp, Zap,
   Eye, ChevronRight, ShoppingBag, Heart, BarChart3,
   // Professional icons for features
   Crown, Award, Medal, Diamond, Sparkle,
@@ -17,10 +17,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import bgLuxuryAssurance from '@/app/assets/card background/luxury assurance.png';
-import bgComplimentaryShipping from '@/app/assets/card background/complementory shipping.png';
-import bgPrivateConcierge from '@/app/assets/card background/Private Concierge.png';
-import bgSecureCheckout from '@/app/assets/card background/Secure Checkout.png';
 
 import { useState, useEffect } from 'react';
 import { dummyProducts, categories, features } from '@/lib/dummy-data';
@@ -42,26 +38,22 @@ export default function Home() {
     {
       title: 'Luxury Assurance',
       desc: '100% Authentic Products',
-      bg: bgLuxuryAssurance,
-      gradient: 'from-violet-500 to-purple-700'
+      icon: Crown,
     },
     {
       title: 'Complimentary Shipping',
       desc: 'Free on orders over LKR 5,000',
-      bg: bgComplimentaryShipping,
-      gradient: 'from-rose-400 to-pink-600'
+      icon: Truck,
     },
     {
       title: 'Private Concierge',
       desc: '24/7 Dedicated Support',
-      bg: bgPrivateConcierge,
-      gradient: 'from-amber-400 to-orange-500'
+      icon: Users,
     },
     {
       title: 'Secure Checkout',
       desc: 'Encrypted & Safe Payments',
-      bg: bgSecureCheckout,
-      gradient: 'from-emerald-400 to-teal-600'
+      icon: Shield,
     },
   ];
 
@@ -94,7 +86,7 @@ export default function Home() {
       <FlashDeals />
 
       {/* Categories Grid - Compact (Fits One Screen) */}
-      <section className="relative min-h-[90vh] w-full flex items-center justify-center px-4 md:px-8 py-6 overflow-hidden bg-gradient-to-br from-gray-50 to-white">
+      <section className="relative w-full flex items-center justify-center px-4 md:px-8 py-10 md:py-6 md:min-h-[90vh] overflow-hidden bg-gradient-to-br from-gray-50 to-white">
         <div className="relative max-w-7xl mx-auto w-full">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row items-end justify-between mb-6 gap-2">
@@ -133,7 +125,7 @@ export default function Home() {
           </div>
 
           {/* Categories Grid - Reduced Height */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 h-[400px] md:h-[440px] lg:h-[480px]">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 md:h-[440px] lg:h-[480px]">
             {/* Main Large Category */}
             {categories[0] && (
               <motion.div
@@ -141,7 +133,7 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.3 }}
                 viewport={{ once: true }}
-                className="md:col-span-6 relative overflow-hidden rounded-xl group shadow-xl h-full"
+                className="md:col-span-6 relative overflow-hidden rounded-xl group shadow-xl h-56 sm:h-64 md:h-full"
               >
                 <Link href={categories[0].link} className="block relative w-full h-full">
                   <Image
@@ -172,7 +164,7 @@ export default function Home() {
             )}
 
             {/* Right Grid - 2x2 Layout */}
-            <div className="md:col-span-6 grid grid-cols-1 md:grid-cols-2 gap-3 h-full">
+            <div className="md:col-span-6 grid grid-cols-2 gap-3 md:h-full">
               {categories.slice(1, 5).map((cat, idx) => (
                 <motion.div
                   key={cat.name}
@@ -180,7 +172,7 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.4 + (idx * 0.1) }}
                   viewport={{ once: true }}
-                  className="relative overflow-hidden rounded-xl group shadow-lg h-full"
+                  className="relative overflow-hidden rounded-xl group shadow-lg h-28 sm:h-32 md:h-full"
                 >
                   <Link href={cat.link} className="block relative w-full h-full">
                     <Image
@@ -188,12 +180,12 @@ export default function Home() {
                       alt={cat.name}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
-                      sizes="(max-width: 768px) 100vw, 25vw"
+                      sizes="(max-width: 768px) 50vw, 25vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent group-hover:bg-black/50 transition-colors duration-400" />
 
-                    <div className="absolute inset-0 flex flex-col justify-end p-3">
-                      <h3 className="text-base md:text-lg font-serif text-white mb-0.5 leading-tight">
+                    <div className="absolute inset-0 flex flex-col justify-end p-2.5 sm:p-3">
+                      <h3 className="text-sm sm:text-base md:text-lg font-serif text-white mb-0.5 leading-tight">
                         {cat.name}
                       </h3>
                       <div className="flex items-center gap-1.5">
@@ -228,48 +220,46 @@ export default function Home() {
             <h2 className="text-2xl md:text-3xl font-serif text-gray-900">Why Shop With Us</h2>
           </motion.div>
 
-          {/* Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {professionalFeatures.map((feature, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 28 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1, type: 'spring', stiffness: 90, damping: 16 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -6, transition: { type: 'spring', stiffness: 300, damping: 20 } }}
-                className="group relative bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-transparent transition-all duration-300 cursor-default overflow-hidden"
-              >
-                {/* Background image banner */}
-                <div className="relative w-full aspect-[16/9] overflow-hidden">
-                  <Image
-                    src={feature.bg}
-                    alt=""
-                    fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
+          {/* Feature list */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-12 gap-x-6 mt-4">
+            {professionalFeatures.map((feature, i) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.12, duration: 0.5, ease: 'easeOut' }}
+                  viewport={{ once: true }}
+                  className="group relative flex flex-col items-center text-center px-2"
+                >
+                  {/* Divider between items on desktop */}
+                  {i !== 0 && (
+                    <span className="hidden lg:block absolute left-0 top-3 bottom-3 w-px bg-gray-100" />
+                  )}
 
-                <div className="relative p-6">
-                  {/* Text */}
-                  <h4 className="text-base font-bold text-gray-900 mb-1.5 group-hover:text-gray-800">
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: -6 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                    className="w-16 h-16 rounded-full bg-gray-50 group-hover:bg-rose-50 flex items-center justify-center mb-5 transition-colors duration-300"
+                  >
+                    <Icon
+                      className="w-7 h-7 text-gray-700 group-hover:text-rose-500 transition-colors duration-300"
+                      strokeWidth={1.5}
+                    />
+                  </motion.div>
+
+                  <h4 className="text-base font-bold text-gray-900 mb-1.5">
                     {feature.title}
                   </h4>
-                  <p className="text-sm text-gray-500 leading-relaxed">
+                  <p className="text-sm text-gray-500 leading-relaxed max-w-[200px]">
                     {feature.desc}
                   </p>
 
-                  {/* Bottom check */}
-                  <div className="mt-5 pt-4 border-t border-gray-100 flex items-center gap-1.5 text-xs font-semibold text-gray-400 group-hover:text-gray-600 transition-colors">
-                    <div className={`w-4 h-4 rounded-full bg-gradient-to-br ${feature.gradient} flex items-center justify-center flex-shrink-0`}>
-                      <Check className="w-2.5 h-2.5 text-white" />
-                    </div>
-                    Guaranteed
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                  <span className="mt-4 h-px w-0 bg-rose-400 transition-all duration-300 group-hover:w-10" />
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
