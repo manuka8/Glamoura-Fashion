@@ -43,10 +43,10 @@ const COLOR_MAP: Record<string, string> = {
 /* ─── Toast ──────────────────────────────────────────────────── */
 const Toast = ({ message, onClose }: { message: string; onClose: () => void }) => (
   <motion.div
-    initial={{ opacity: 0, y: 40, scale: 0.95 }}
-    animate={{ opacity: 1, y: 0,  scale: 1 }}
-    exit={{ opacity: 0, y: 40, scale: 0.95 }}
-    className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-gray-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl"
+    initial={{ opacity: 0, scale: 0.95 }}
+    animate={{ opacity: 1, scale: 1 }}
+    exit={{ opacity: 0, scale: 0.95 }}
+    className="fixed top-20 lg:top-auto lg:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-gray-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl"
   >
     <div className="w-5 h-5 rounded-full bg-emerald-400 flex items-center justify-center flex-shrink-0">
       <Check className="w-3 h-3 text-white" />
